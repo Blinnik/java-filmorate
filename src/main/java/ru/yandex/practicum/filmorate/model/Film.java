@@ -21,7 +21,7 @@ public class Film {
     private LocalDate releaseDate;
     @Positive
     private Integer duration;
-    final Set<Long> likes = new HashSet<>();
+    private final Set<Long> likes = new HashSet<>();
 
     public void addLike(Long id) {
         likes.add(id);
