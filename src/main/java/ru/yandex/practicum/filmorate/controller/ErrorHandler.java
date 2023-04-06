@@ -34,23 +34,23 @@ public class ErrorHandler {
     public ErrorResponse handleThrowable(final Throwable e) {
         return new ErrorResponse(e.getClass().getSimpleName(), e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
-}
 
-@AllArgsConstructor
-class ErrorResponse {
-    String error;
-    String errorMessage;
-    HttpStatus responseCodeStatus;
+    @AllArgsConstructor
+    static class ErrorResponse {
+        String error;
+        String errorMessage;
+        HttpStatus responseCodeStatus;
 
-    public String getError() {
-        return error;
-    }
+        public String getError() {
+            return error;
+        }
 
-    public String getErrorMessage() {
-        return errorMessage;
-    }
+        public String getErrorMessage() {
+            return errorMessage;
+        }
 
-    public HttpStatus getResponseCodeStatus() {
-        return responseCodeStatus;
+        public HttpStatus getResponseCodeStatus() {
+            return responseCodeStatus;
+        }
     }
 }
