@@ -1,27 +1,31 @@
 package ru.yandex.practicum.filmorate.model;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
+import lombok.experimental.FieldDefaults;
 import ru.yandex.practicum.filmorate.annotation.FilmReleaseDateConstraint;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Builder(toBuilder = true)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Film {
-    private Long id;
+    Long id;
     @NotEmpty
-    private String name;
+    String name;
     @Size(max = 200, message = "Описание не должно превышать 200 символов")
-    private String description;
+    String description;
     @NotNull
     @FilmReleaseDateConstraint
-    private LocalDate releaseDate;
+    LocalDate releaseDate;
     @Positive
-    private Integer duration;
-    private final Set<Long> likes = new HashSet<>();
+    Integer duration;
+    final Set<Long> likes = new HashSet<>();
 
     public void addLike(Long id) {
         likes.add(id);

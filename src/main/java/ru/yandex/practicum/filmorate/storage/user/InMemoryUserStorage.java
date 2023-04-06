@@ -1,5 +1,7 @@
 package ru.yandex.practicum.filmorate.storage.user;
 
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.UserAlreadyExistsException;
@@ -12,9 +14,10 @@ import java.util.Map;
 
 @Component
 @Slf4j
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class InMemoryUserStorage implements UserStorage {
-    Map<Long, User> usersById = new HashMap<>();
-    private static long lastId = 1;
+    final Map<Long, User> usersById = new HashMap<>();
+    static long lastId = 1;
 
     @Override
     public Collection<User> getUsers() {
