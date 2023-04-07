@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.service.user;
+package ru.yandex.practicum.filmorate.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -11,7 +11,8 @@ import java.util.Set;
 
 @Service
 @Slf4j
-public class InMemoryUserService implements UserService {
+public class UserService {
+
     public void addFriend(UserStorage userStorage, Long userId, Long friendId) {
         User user = userStorage.getUserById(userId);
         User friend = userStorage.getUserById(friendId);

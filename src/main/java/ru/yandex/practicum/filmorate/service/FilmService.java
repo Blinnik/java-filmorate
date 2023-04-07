@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.service.film;
+package ru.yandex.practicum.filmorate.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class InMemoryFilmService implements FilmService {
+public class FilmService {
 
     public void addLike(FilmStorage filmStorage, UserStorage userStorage, Long id, Long userId) {
         Film film = filmStorage.getFilmById(id);
