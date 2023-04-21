@@ -2,6 +2,7 @@
 Repository for Filmorate project.
 
 ## Sql-диаграмма и пояснения к ней
+![SQL](https://raw.githubusercontent.com/Blinnik/java-filmorate/e3e9f65fad6310c97c479a30c265b6ca35550098/filmorate_sql.png)
 
 ### ***film***
 Содержит данные о фильме.
