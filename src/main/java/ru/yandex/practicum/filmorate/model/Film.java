@@ -8,8 +8,7 @@ import ru.yandex.practicum.filmorate.annotation.FilmReleaseDateConstraint;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Data
 @Builder(toBuilder = true)
@@ -17,6 +16,7 @@ import java.util.Set;
 public class Film {
     Long id;
     @NotEmpty
+    @Size(max = 64, message = "Название фильма не должно превышать 64 символа")
     String name;
     @Size(max = 200, message = "Описание не должно превышать 200 символов")
     String description;
@@ -24,14 +24,19 @@ public class Film {
     @FilmReleaseDateConstraint
     LocalDate releaseDate;
     @Positive
-    Integer duration;
-    final Set<Long> likes = new HashSet<>();
+    Short duration;
+    Mpa mpa;
+    Set<Long> likes;
+    Set<Genre> genres;
 
-    public void addLike(Long id) {
-        likes.add(id);
-    }
+    public Map<String, Object> toMap() {
+        Map<String, Object> values = new HashMap<>();
+        values.put("name", name);
+        values.put("description", description);
+        values.put("release_date", releaseDate);
+        values.put("duration", duration);
+        values.put("mpa_id", mpa.getId());
 
-    public void removeLike(Long id) {
-        likes.remove(id);
+        return values;
     }
 }

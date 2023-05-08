@@ -9,9 +9,7 @@ import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Data
 @Builder(toBuilder = true)
@@ -27,15 +25,7 @@ public class User {
     String name;
     @PastOrPresent
     LocalDate birthday;
-    final Set<Long> friends = new HashSet<>();
-
-    public void addFriend(Long friendId) {
-        friends.add(friendId);
-    }
-
-    public void deleteFriend(Long friendId) {
-        friends.remove(friendId);
-    }
+    Set<Long> friends;
 
     @Override
     public boolean equals(Object o) {
@@ -48,5 +38,15 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(id, email, login, name, birthday, friends);
+    }
+
+    public Map<String, Object> toMap() {
+        Map<String, Object> values = new HashMap<>();
+        values.put("email", email);
+        values.put("login", login);
+        values.put("name", name);
+        values.put("birthday", birthday);
+
+        return values;
     }
 }

@@ -1,12 +1,11 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.service.FilmService;
 import ru.yandex.practicum.filmorate.service.UserService;
-import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
-import ru.yandex.practicum.filmorate.storage.user.UserStorage;
+import ru.yandex.practicum.filmorate.dao.UserDao;
 
 import javax.validation.Valid;
 import java.util.*;
@@ -14,62 +13,63 @@ import java.util.*;
 @RestController
 @RequestMapping("/users")
 @Slf4j
-public class UserController extends GeneralController {
+public class UserController {
+    UserDao userDao;
+    UserService userService;
 
-    public UserController(FilmStorage filmStorage,
-                          FilmService filmService,
-                          UserStorage userStorage,
+    @Autowired
+    public UserController(UserDao userDao,
                           UserService userService) {
-        super(filmStorage, filmService, userStorage, userService);
+        this.userDao = userDao;
+        this.userService = userService;
     }
 
     @GetMapping
     public Collection<User> getUsers() {
-        return userStorage.getUsers();
+        return userDao.getUsers();
     }
 
     @GetMapping("/{id}")
     public User getUserById(@PathVariable Long id) {
-        return userStorage.getUserById(id);
+        return userDao.getUserById(id);
     }
 
     @PostMapping
     public User createUser(@Valid @RequestBody User user) {
-        return userStorage.createUser(user);
+        return userDao.createUser(user);
     }
 
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable Long id) {
-        userStorage.deleteUserById(id);
+        userDao.deleteUserById(id);
     }
 
     @PutMapping
     public User updateUser(@Valid @RequestBody User user) {
-        return userStorage.updateUser(user);
+        return userDao.updateUser(user);
     }
 
+
+    // В данном ТЗ логика этого контроллера меняется
+    // friendId добавляет id в друзья
     @PutMapping("/{id}/friends/{friendId}")
     public void addFriend(@PathVariable Long id, @PathVariable Long friendId) {
-        userService.addFriend(userStorage, id, friendId);
+        userService.addFriendship(friendId, id);
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")
     public void deleteFriend(@PathVariable Long id, @PathVariable Long friendId) {
-        userService.deleteFriend(userStorage, id, friendId);
+        userService.deleteFriendship(id, friendId);
     }
 
     @GetMapping("/{id}/friends")
-    public Set<User> getFriends(@PathVariable Long id) {
-        return userService.getFriends(userStorage, id);
+    public List<User> getFriends(@PathVariable Long id) {
+        return userService.getFriends(id);
     }
 
 
     @GetMapping("/{id}/friends/common/{otherId}")
-    public Set<User> getCommonFriends(@PathVariable Long id, @PathVariable Long otherId) {
-        return userService.getCommonFriends(userStorage, id, otherId);
-    }
-
-    public UserStorage getUserStorage() {
-        return userStorage;
+    public List<User> getCommonFriends(@PathVariable Long id, @PathVariable Long otherId) {
+        return userService.getCommonFriends(id, otherId);
     }
 }
