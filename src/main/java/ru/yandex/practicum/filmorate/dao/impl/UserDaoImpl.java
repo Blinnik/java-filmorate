@@ -8,7 +8,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.dao.FriendshipDao;
 import ru.yandex.practicum.filmorate.dao.UserDao;
 import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
@@ -16,21 +15,17 @@ import ru.yandex.practicum.filmorate.model.User;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Component
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
 public class UserDaoImpl implements UserDao {
     JdbcTemplate jdbcTemplate;
-    FriendshipDao friendshipDao;
 
     @Autowired
-    public UserDaoImpl(JdbcTemplate jdbcTemplate, FriendshipDao friendshipDao) {
+    public UserDaoImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
-        this.friendshipDao = friendshipDao;
     }
 
     @Override
@@ -61,7 +56,6 @@ public class UserDaoImpl implements UserDao {
         Long userId = simpleJdbcInsert.executeAndReturnKey(user.toMap()).longValue();
 
         user.setId(userId);
-        user.setFriends(new HashSet<>());
 
         log.info("Был создан новый пользователь {}", user);
         return user;
@@ -90,7 +84,6 @@ public class UserDaoImpl implements UserDao {
         setNameIfEmpty(user);
 
         Long userId = user.getId();
-        user.setFriends(new HashSet<>(friendshipDao.getFriendsIds(userId)));
 
         if (jdbcTemplate.update(sql, user.getEmail(), user.getLogin(), user.getName(),
                 user.getBirthday(), userId) > 0) {
@@ -115,15 +108,12 @@ public class UserDaoImpl implements UserDao {
         String name = rs.getString("name");
         LocalDate birthday = rs.getDate("birthday").toLocalDate();
 
-        Set<Long> friends = new HashSet<>(friendshipDao.getFriendsIds(id));
-
         return User.builder()
                 .id(id)
                 .email(email)
                 .login(login)
                 .name(name)
                 .birthday(birthday)
-                .friends(friends)
                 .build();
     }
 }

@@ -57,22 +57,23 @@ public class UserService {
     }
 
     public List<User> getFriends(Long id) {
-        User user = userDao.getUserById(id);
-        Set<User> users = new HashSet<>();
-        for (Long curUserId : user.getFriends()) {
-            users.add(userDao.getUserById(curUserId));
+        List<Long> friendsIds = friendshipDao.getFriendsIds(id);
+        List<User> friends = new ArrayList<>();
+        for (Long friendId : friendsIds) {
+            friends.add(userDao.getUserById(friendId));
         }
-        return users.stream()
+        return friends.stream()
                 .sorted(Comparator.comparingLong(User::getId))
                 .collect(Collectors.toList());
     }
 
-    public List<User> getCommonFriends(Long userId, Long friendId) {
-        User user = userDao.getUserById(userId);
-        User friend = userDao.getUserById(friendId);
+    public List<User> getCommonFriends(Long user1Id, Long user2Id) {
+        List<Long> user1FriendsIds = friendshipDao.getFriendsIds(user1Id);
+        List<Long> user2FriendsIds = friendshipDao.getFriendsIds(user2Id);
         Set<User> commonFriends = new HashSet<>();
-        for (Long curFriendId : user.getFriends()) {
-            if (friend.getFriends().contains(curFriendId)) {
+
+        for (Long curFriendId : user1FriendsIds) {
+            if (user2FriendsIds.contains(curFriendId)) {
                 commonFriends.add(userDao.getUserById(curFriendId));
             }
         }

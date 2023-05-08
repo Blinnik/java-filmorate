@@ -17,9 +17,7 @@ import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
@@ -83,18 +81,8 @@ public class FriendshipDaoTests {
         // дружба односторонняя, друг отображается только у user с id=2
         friendshipDao.addFriendship(1L, 2L);
 
-        User updatedUser1 = userDao.getUserById(1L);
-        User updatedUser2 = userDao.getUserById(2L);
-
-        assertThat(updatedUser1)
-                .hasFieldOrPropertyWithValue("id", 1L)
-                .hasFieldOrPropertyWithValue("friends", Set.of());
-
-        assertThat(updatedUser2)
-                .hasFieldOrPropertyWithValue("id", 2L)
-                .hasFieldOrPropertyWithValue("friends", Set.of(1L));
-
-
+        assertEquals(List.of(), friendshipDao.getFriendsIds(1L));
+        assertEquals(List.of(1L), friendshipDao.getFriendsIds(2L));
     }
 
     @Test
@@ -119,16 +107,8 @@ public class FriendshipDaoTests {
         friendshipDao.addFriendship(1L, 2L);
         friendshipDao.addFriendship(2L, 1L);
 
-        User updatedUser1 = userDao.getUserById(1L);
-        User updatedUser2 = userDao.getUserById(2L);
-
-        assertThat(updatedUser1)
-                .hasFieldOrPropertyWithValue("id", 1L)
-                .hasFieldOrPropertyWithValue("friends", Set.of(2L));
-
-        assertThat(updatedUser2)
-                .hasFieldOrPropertyWithValue("id", 2L)
-                .hasFieldOrPropertyWithValue("friends", Set.of(1L));
+        assertEquals(List.of(2L), friendshipDao.getFriendsIds(1L));
+        assertEquals(List.of(1L), friendshipDao.getFriendsIds(2L));
     }
 
     @Test
