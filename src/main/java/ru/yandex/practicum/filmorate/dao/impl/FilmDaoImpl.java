@@ -142,7 +142,7 @@ public class FilmDaoImpl implements FilmDao {
     public boolean addLike(Long filmId, Long userId) {
         String sql = "insert into films_likes (user_id, film_id) " +
                 "values (?, ?)";
-        if(jdbcTemplate.update(sql, userId, filmId) > 0) {
+        if (jdbcTemplate.update(sql, userId, filmId) > 0) {
             log.info("Пользователь с ID={} поставил лайк фильму с ID={}", userId, filmId);
             return true;
         }
@@ -154,7 +154,7 @@ public class FilmDaoImpl implements FilmDao {
     public boolean removeLike(Long filmId, Long userId) {
         String sql = "delete from films_likes " +
                 "where user_id = ? and film_id = ?";
-        if(jdbcTemplate.update(sql, userId, filmId) > 0) {
+        if (jdbcTemplate.update(sql, userId, filmId) > 0) {
             log.info("Пользователь с ID={} удалил лайк фильму с ID={}", userId, filmId);
             return true;
         }
