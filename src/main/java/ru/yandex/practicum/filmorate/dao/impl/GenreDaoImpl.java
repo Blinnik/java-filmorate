@@ -9,7 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.dao.GenreDao;
-import ru.yandex.practicum.filmorate.exception.GenreNotFoundException;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Genre;
 
 import java.util.Comparator;
@@ -39,7 +39,7 @@ public class GenreDaoImpl implements GenreDao {
             return jdbcTemplate.queryForObject(sql, genreRowMapper, id);
         } catch (EmptyResultDataAccessException e) {
             log.warn("Жанра с ID={} не существует", id);
-            throw new GenreNotFoundException("Жанра с ID=" + id + " не существует");
+            throw new NotFoundException("Жанра с ID=" + id + " не существует");
         }
     }
 
