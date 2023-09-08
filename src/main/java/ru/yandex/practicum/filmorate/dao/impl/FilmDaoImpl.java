@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.dao.FilmDao;
 import ru.yandex.practicum.filmorate.dao.GenreDao;
 import ru.yandex.practicum.filmorate.dao.MpaDao;
-import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
@@ -121,7 +121,7 @@ public class FilmDaoImpl implements FilmDao {
             return film;
         }
         log.warn("Фильм с ID={} не найден", film.getId());
-        throw new FilmNotFoundException("Фильма с ID=" + filmId + " не существует");
+        throw new NotFoundException("Фильма с ID=" + filmId + " не существует");
     }
 
     @Override
@@ -134,7 +134,7 @@ public class FilmDaoImpl implements FilmDao {
             return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> mapRowToFilm(rs), id);
         } catch (EmptyResultDataAccessException e) {
             log.warn("Фильм с ID={} не найден", id);
-            throw new FilmNotFoundException("Фильма с ID=" + id + " не существует");
+            throw new NotFoundException("Фильма с ID=" + id + " не существует");
         }
     }
 
@@ -188,7 +188,7 @@ public class FilmDaoImpl implements FilmDao {
                 .collect(Collectors.toCollection(LinkedHashSet::new)));
     }
 
-    // Добавляет жанры в БД, а также добавляет название жанров объекту фильма
+    // Adds genres to the database, and also adds the genre name to the movie object
     private void addGenres(Film film, Set<Genre> genres) {
         genres.forEach(genre -> {
             Short genreId = genre.getId();
