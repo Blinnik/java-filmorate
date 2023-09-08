@@ -47,9 +47,6 @@ public class UserController {
         return userDao.updateUser(user);
     }
 
-
-    // В данном ТЗ логика этого контроллера меняется
-    // friendId добавляет id в друзья
     @PutMapping("/{id}/friends/{friendId}")
     public void addFriend(@PathVariable Long id, @PathVariable Long friendId) {
         userService.addFriendship(friendId, id);

@@ -14,7 +14,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.jdbc.JdbcTestUtils;
 import ru.yandex.practicum.filmorate.dao.FilmDao;
 import ru.yandex.practicum.filmorate.dao.GenreDao;
-import ru.yandex.practicum.filmorate.exception.GenreNotFoundException;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
@@ -52,8 +52,8 @@ public class GenreDaoTests {
     }
 
     @Test
-    public void getGenreById_shouldThrowGenreNotFoundException() {
-        assertThrows(GenreNotFoundException.class, () -> genreDao.getGenreById((short) 9999));
+    public void getGenreById_shouldThrowNotFoundException() {
+        assertThrows(NotFoundException.class, () -> genreDao.getGenreById((short) 9999));
     }
 
     @Test
@@ -170,13 +170,4 @@ public class GenreDaoTests {
     public void getGenreName_shouldGetNameOfGenre() {
         assertEquals("Комедия", genreDao.getGenreName((short) 1));
     }
-
-    /*
-    Genre getGenreById(Short id); 2/2
-    List<Genre> getGenres(); 1/1
-    List<Genre> getFilmGenres(Long id); 2/2
-    boolean clearFilmGenres(Long filmId); 2/2
-    boolean addGenreToFilm(Short genreId, Long filmId); 2/2
-    String getGenreName(Short genreId); 2/2
-    */
 }

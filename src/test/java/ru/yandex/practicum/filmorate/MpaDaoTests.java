@@ -9,7 +9,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.EmptyResultDataAccessException;
 import ru.yandex.practicum.filmorate.dao.MpaDao;
-import ru.yandex.practicum.filmorate.exception.MpaNotFoundException;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Mpa;
 
 import java.util.List;
@@ -25,8 +25,8 @@ public class MpaDaoTests {
     MpaDao mpaDao;
 
     @Test
-    public void getMpaById_shouldThrowMpaNotFoundException() {
-        assertThrows(MpaNotFoundException.class, () -> mpaDao.getMpaById((short) 999));
+    public void getMpaById_shouldThrowNotFoundException() {
+        assertThrows(NotFoundException.class, () -> mpaDao.getMpaById((short) 999));
     }
 
     @Test
@@ -58,10 +58,4 @@ public class MpaDaoTests {
     public void getMpaName_shouldGetNameOfMpa() {
         assertEquals("G", mpaDao.getMpaName((short) 1));
     }
-
-    /*
-    Mpa getMpaById(Short id); 2/2
-    List<Mpa> getMpas(); 1/1
-    String getMpaName(Short mpaId); 2/2
-    */
 }

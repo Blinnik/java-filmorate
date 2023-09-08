@@ -11,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.jdbc.JdbcTestUtils;
 import ru.yandex.practicum.filmorate.dao.UserDao;
-import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
@@ -127,8 +127,8 @@ public class UserDaoTests {
     }
 
     @Test
-    public void getUserById_shouldThrowUserNotFoundException() {
-        assertThrows(UserNotFoundException.class, () -> userDao.getUserById(1L));
+    public void getUserById_shouldThrowNotFoundException() {
+        assertThrows(NotFoundException.class, () -> userDao.getUserById(1L));
     }
 
     @Test
@@ -144,7 +144,7 @@ public class UserDaoTests {
 
         assertEquals(createdUser, userDao.getUserById(1L));
         assertTrue(userDao.deleteUserById(1L));
-        assertThrows(UserNotFoundException.class, () -> userDao.getUserById(1L));
+        assertThrows(NotFoundException.class, () -> userDao.getUserById(1L));
     }
 
     @Test
@@ -164,7 +164,6 @@ public class UserDaoTests {
         User createdUser = userDao.createUser(user);
 
         User changedUser = User.builder()
-                // Для обновления пользователя нужно сразу задать нужный id
                 .id(1L)
                 .login("login")
                 .name("new test name")
@@ -189,7 +188,7 @@ public class UserDaoTests {
                 .birthday(LocalDate.of(1933, 3, 25))
                 .build();
 
-        assertThrows(UserNotFoundException.class, () -> userDao.updateUser(changedUser));
+        assertThrows(NotFoundException.class, () -> userDao.updateUser(changedUser));
     }
 
     @Test
@@ -201,14 +200,6 @@ public class UserDaoTests {
                 .birthday(LocalDate.of(1933, 3, 25))
                 .build();
 
-        assertThrows(UserNotFoundException.class, () -> userDao.updateUser(changedUser));
+        assertThrows(NotFoundException.class, () -> userDao.updateUser(changedUser));
     }
-
-    /*
-    List<User> getUsers(); 2/2
-    User getUserById(Long id); 2/2
-    User createUser(User user); 2/2
-    boolean deleteUserById(Long id); 2/2
-    User updateUser(User user); 3/3
-    */
 }

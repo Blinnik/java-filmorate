@@ -78,7 +78,7 @@ public class FriendshipDaoTests {
 
         userDao.createUser(user1);
         userDao.createUser(user2);
-        // дружба односторонняя, друг отображается только у user с id=2
+        // friendship is one-sided, a friend is displayed only for a user with id=2
         friendshipDao.addFriendship(1L, 2L);
 
         assertEquals(List.of(), friendshipDao.getFriendsIds(1L));
@@ -180,7 +180,7 @@ public class FriendshipDaoTests {
         assertEquals(List.of(), friendshipDao.getFriendsIds(1L));
         assertEquals(List.of(1L), friendshipDao.getFriendsIds(2L));
         assertTrue(friendshipDao.updateFriendship(1L, 2L, true));
-        // теперь у первого пользователя в друзьях второй
+        // now the first user has a second friend
         assertEquals(List.of(2L), friendshipDao.getFriendsIds(1L));
         assertEquals(List.of(1L), friendshipDao.getFriendsIds(2L));
     }
@@ -214,11 +214,4 @@ public class FriendshipDaoTests {
     public void deleteFriendship_shouldNotDeleteFriendshipIfIdDoesNotExist() {
         assertFalse(friendshipDao.deleteFriendship(1L, 2L));
     }
-
-    /*
-    List<Long> getFriendsIds(Long id); 2/2
-    boolean addFriendship(Long user1Id, Long user2Id); 4/4
-    boolean updateFriendship(Long user1Id, Long user2Id, boolean status); 3/3
-    boolean deleteFriendship(Long user1Id, Long user2Id); 2/2
-    */
 }

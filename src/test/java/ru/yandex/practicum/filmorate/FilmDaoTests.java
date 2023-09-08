@@ -13,7 +13,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.jdbc.JdbcTestUtils;
 import ru.yandex.practicum.filmorate.dao.FilmDao;
 import ru.yandex.practicum.filmorate.dao.UserDao;
-import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
@@ -159,8 +159,8 @@ public class FilmDaoTests {
     }
 
     @Test
-    public void getFilmById_shouldThrowFilmNotFoundException() {
-        assertThrows(FilmNotFoundException.class, () -> filmDao.getFilmById(1L));
+    public void getFilmById_shouldThrowNotFoundException() {
+        assertThrows(NotFoundException.class, () -> filmDao.getFilmById(1L));
     }
 
     @Test
@@ -181,7 +181,7 @@ public class FilmDaoTests {
 
         assertEquals(createdFilm, filmDao.getFilmById(1L));
         assertTrue(filmDao.deleteFilmById(1L));
-        assertThrows(FilmNotFoundException.class, () -> filmDao.getFilmById(1L));
+        assertThrows(NotFoundException.class, () -> filmDao.getFilmById(1L));
     }
 
     @Test
@@ -202,7 +202,6 @@ public class FilmDaoTests {
         Film createdFilm = filmDao.createFilm(film);
 
         Film changedFilm = Film.builder()
-                // Для обновления фильма нужно сразу задать нужный id
                 .id(1L)
                 .name("new test name")
                 .description("new description")
@@ -236,7 +235,7 @@ public class FilmDaoTests {
                 .mpa(Mpa.builder().id((short) 2).build())
                 .build();
 
-        assertThrows(FilmNotFoundException.class, () -> filmDao.updateFilm(changedFilm));
+        assertThrows(NotFoundException.class, () -> filmDao.updateFilm(changedFilm));
     }
 
     @Test
@@ -253,7 +252,7 @@ public class FilmDaoTests {
                 .mpa(Mpa.builder().id((short) 2).build())
                 .build();
 
-        assertThrows(FilmNotFoundException.class, () -> filmDao.updateFilm(changedFilm));
+        assertThrows(NotFoundException.class, () -> filmDao.updateFilm(changedFilm));
     }
 
     @Test
@@ -438,7 +437,7 @@ public class FilmDaoTests {
 
         Film createdFilm = filmDao.createFilm(film);
         Film createdFilm2 = filmDao.createFilm(film2);
-        // по умолчанию (если параметр null) лимит 10
+        // by default (if the parameter is null) the limit is 10
         assertEquals(List.of(createdFilm, createdFilm2), filmDao.getPopularFilms(10));
     }
 
@@ -514,19 +513,7 @@ public class FilmDaoTests {
 
         Film film2With2Likes = filmDao.getFilmById(2L);
         Film film3With3Likes = filmDao.getFilmById(3L);
-        // Сначала третий фильм, затем второй
+
         assertEquals(List.of(film3With3Likes, film2With2Likes), filmDao.getPopularFilms(2));
     }
-
-    /*
-    List<Film> getFilms(); 2/2
-    Film createFilm(Film film); 2/2
-    boolean deleteFilmById(Long id); 2/2
-    Film updateFilm(Film film); 3/3
-    Film getFilmById(Long id); 2/2
-    boolean addLike(Long filmId, Long userId); 2/2
-    boolean removeLike(Long filmId, Long userId); 2/2
-    List<Long> getLikes(Long filmId) 2/2;
-    List<Film> getPopularFilms(Integer limit) 2/2;
-    */
 }
