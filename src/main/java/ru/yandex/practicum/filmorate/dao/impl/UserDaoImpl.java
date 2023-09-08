@@ -9,7 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.dao.UserDao;
-import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.sql.ResultSet;
@@ -42,7 +42,7 @@ public class UserDaoImpl implements UserDao {
             return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> mapRowToUser(rs), id);
         } catch (EmptyResultDataAccessException e) {
             log.warn("Пользователь с ID={} не найден", id);
-            throw new UserNotFoundException("Пользователя с указанным ID не существует");
+            throw new NotFoundException("Пользователя с указанным ID не существует");
         }
     }
 
@@ -92,7 +92,7 @@ public class UserDaoImpl implements UserDao {
         }
 
         log.warn("Пользователь с ID={} не найден", userId);
-        throw new UserNotFoundException("Пользователя с указанным ID не существует");
+        throw new NotFoundException("Пользователя с указанным ID не существует");
     }
 
     private void setNameIfEmpty(User user) {
