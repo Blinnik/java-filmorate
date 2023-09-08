@@ -1,68 +1,95 @@
-# java-filmorate
-Репозиторий для проекта Filmorate.
+# Filmorate
+A social network where you can choose a movie based on what ratings you and your friends give to movies.
 
-## Sql-диаграмма и пояснения к ней
+## Technology stack
+
+![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
+![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white)
+![Apache Maven](https://img.shields.io/badge/Apache%20Maven-C71A36?style=for-the-badge&logo=Apache%20Maven&logoColor=white)
+
+## Functionality
++ creating a user, updating a user, getting a list of all users;
++ adding friends, removing from friends, displaying a list of mutual friends;
++ adding a movie, updating a movie, getting all movies, searching for movies;
++ adding and removing likes, displaying most popular movies by the number of likes;
++ manipulations with genres;
++ manipulations with MPA.
+
+## Setup
+1. [Install Java 11 JDK](https://hg.openjdk.org/jdk/jdk11)
+2. Clone this repository to your local machine
+```shell
+git clone git@github.com:Blinnik/java-filmorate.git
+```
+3. Run application
+
+## Group project
+The project was finalized during teamwork in another [repository](https://github.com/LLaym/filmorate).
+I was developing the "reviews" and "event feed" functionality, in addition, I was reworking the project structure, validation
+
+## SQL Diagram
 ![SQL](filmorate_sql.png)
 
 ### ***films***
-Содержит данные о фильме.
-Таблица включает такие поля:
-* первичный ключ _film_id_ — идентификатор фильма;
-* _name_ — название фильма;
-* _description_ — описание фильма;
-* _release_date_ — дата релиза;
-* _duration_ — длительность (в минутах);
-* _mpa_id_ — идентификатор рейтинга.
+Contains data about the movie.
+The table includes the following fields:
+* primary key _film_id_ — movie ID;
+* _name_ — the name of the movie;
+* _description_ — description of the movie;
+* _release_date_ — release date;
+* _duration_ — duration (in minutes);
+* _mpa_id_ — rating ID.
 
 ### ***films_likes***
-Содержит данные о лайках, поставленных фильму.
-Таблица включает такие поля:
-* первичный ключ _user_id_ — идентификатор пользователя, поставившего лайк;
-* внешний ключ _film_id_ — идентификатор фильма.
+Contains data about likes assigned to the movie.
+The table includes the following fields:
+* primary key _user_id_ — ID of the user who put the like;
+* the foreign key _film_id_ — ID of the movie.
 
 ### ***genres***
-Содержит информацию о жанрах кино.
-В таблицу входят поля:
-* первичный ключ _genre_id_ — идентификатор жанра;
-* _name_ — название жанра.
+Contains information about movie genres.
+The table includes the following fields:
+* primary key _genre_id_ — genre ID;
+* _name_ — the name of the genre.
 
 ### ***films_genres***
-Содержит данные о жанрах, указанных фильму.
-Таблица включает такие поля:
-* первичный ключ _genre_id_ — идентификатор лайка;
-* внешний ключ _film_id_ — идентификатор фильма.
+Contains data about the genres specified for the film.
+The table includes the following fields:
+* primary key _genre_id_ — like ID;
+* the foreign key _film_id_ — ID of the movie.
 
 ### ***mpas***
-Содержит информацию о рейтинге Ассоциации кинокомпаний.
-В таблицу входят поля:
-* первичный ключ _mpa_id_ — идентификатор рейтинга;
-* _name_ — название рейтинга.
+Contains information about the rating of the Association of Film Companies.
+The table includes the following fields:
+* primary key _mpa_id_ — rating ID;
+* _name_ — name of the rating.
 
 ### ***users***
-Содержит данные о пользователе.
-Таблица включает такие поля:
-* первичный ключ _user_id_ — идентификатор пользователя;
-* _email_ — электронная почта пользователя;
-* _login_ — логин пользователя;
-* _name_ — имя пользователя;
-* _birthday_ — дата рождения.
+Contains data about the user.
+The table includes the following fields:
+* primary key _user_id_ — user ID;
+* _email_ — user's email address;
+* _login_ — user login;
+* _name_ — username;
+* _birthday_ — date of birth.
 
 ### ***friendships***
-Содержит информацию о дружбе между двумя пользователями.
-В таблицу входят поля:
-* первичный ключ _user_id_ — идентификатор пользователя;
-* внешний ключ _friend_id_ — идентификатор друга пользователя;
-* _status_ — статус (false — неподтвержденная дружба, true — подтвержденная).
+Contains information about the friendship between two users.
+The table includes the following fields:
+* primary key _user_id_ — user ID;
+* the foreign key _friend_id_ — user's friend ID;
+* _status_ — status (false — unconfirmed friendship, true — confirmed).
 
-#### Работа бизнес-логики, связанной с таблицей
-Пользователь 1 добавляет пользователя 2 в друзья. 
-Появляется запись в таблице вида {"user_id" = 1, "friend_id" = 2, "status" = false}.
-У пользователя 2 в друзьях есть пользователь 1, но не наоборот.
-Пользователю 2 нужно добавить в друзья пользователя 1,
-тогда изначальная запись изменится и будет выглядеть след. образом: {"user_id" = 1, "friend_id" = 2, "status" = true}.
-Новая запись при этом не создается. Теперь у пользователя 1 есть в друзьях пользователь 2.
-#### Пример запроса
-Пример запроса к таблице friendships (вывод всех друзей пользователя с id = 1)
+#### The work of the business logic associated with the table
+User 1 adds user 2 as a friend.
+An entry appears in the table of the form {"user_id" = 1, "friend_id" = 2, "status" = false}.
+User 2 has user 1 as a friend, but not vice versa.
+User 2 needs to add user 1 to friends,
+then the initial record will change and look like this: {"user_id" = 1, "friend_id" = 2, "status" = true}.
+A new record is not created in this case. Now user 1 has user 2 as a friend
+
+#### Request example
+Example of a query to the friendships table (output of all the user's friends with id = 1)
 ```
 SELECT friend_id 
 FROM friendships 
@@ -72,15 +99,15 @@ SELECT user_id AS friend_id
 FROM friendships 
 WHERE friend_id = 1
 ```
-### Описание связей между таблицами
+### Description of relationships between tables
 #### films.film_id < films_likes.film_id > users.user_id
-Фильму могут поставить лайки несколько пользователей, один пользователь может поставить несколько лайков разным фильмам.
-Реализация связи "многие ко многим" с помощью вспомогательной таблицы films_likes.
+A movie can be liked by several users, one user can put several links to different movies.
+Implementation of the many-to-many relationship using the films_likes auxiliary table.
 #### films.film_id < films_genres.film_id > genres.genre_id
-Одному фильму соответствует несколько жанров, одному жанру могут соответствовать несколько фильмов.
-Реализация связи "многие ко многим" с помощью вспомогательной таблицы films_genres.
+Several genres correspond to one film, several films can correspond to one genre.
+Implementation of the many-to-many relationship using the films_genres auxiliary table.
 #### mpas.film_id < films.film_id
-Одному рейтингу могут принадлежать несколько фильмов, но у одного фильма не может быть несколько рейтингов.
+Several films can belong to one rating, but one film cannot have several ratings.
 #### users.user_id < friendships.user_id > users.user_id
-У одного пользователя может быть несколько друзей, одна дружба может быть у нескольких пользователей.
-Реализация связи "многие ко многим" с помощью вспомогательной таблицы friendships.
+One user can have several friends, one friendship can have several users.
+Implementation of the many-to-many relationship using the friendships auxiliary table.
