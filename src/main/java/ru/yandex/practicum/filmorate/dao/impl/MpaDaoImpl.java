@@ -9,7 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.dao.MpaDao;
-import ru.yandex.practicum.filmorate.exception.MpaNotFoundException;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Mpa;
 
 import java.util.List;
@@ -37,7 +37,7 @@ public class MpaDaoImpl implements MpaDao {
             return jdbcTemplate.queryForObject(sql, mpaRowMapper, id);
         } catch (EmptyResultDataAccessException e) {
             log.warn("MPA с ID={} не существует", id);
-            throw new MpaNotFoundException("MPA с ID=" + id + " не существует");
+            throw new NotFoundException("MPA с ID=" + id + " не существует");
         }
     }
 
