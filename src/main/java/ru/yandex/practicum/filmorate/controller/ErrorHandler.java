@@ -11,14 +11,13 @@ import ru.yandex.practicum.filmorate.exception.*;
 @RestControllerAdvice
 public class ErrorHandler {
 
-    @ExceptionHandler({FilmNotFoundException.class, UserNotFoundException.class,
-            MpaNotFoundException.class, GenreNotFoundException.class})
+    @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNotFoundExceptions(final RuntimeException e) {
         return new ErrorResponse(e.getClass().getSimpleName(), e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler({FilmAlreadyExistsException.class, UserAlreadyExistsException.class})
+    @ExceptionHandler(AlreadyExistsException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleAlreadyExistExceptions(final RuntimeException e) {
         return new ErrorResponse(e.getClass().getSimpleName(), e.getMessage(), HttpStatus.CONFLICT);
